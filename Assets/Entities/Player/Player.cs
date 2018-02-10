@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ship : MonoBehaviour {
+public class Player : MonoBehaviour {
 
-	public float speed = 5.0f;
+	public float speed = 15.0f;
 	public float padding = 1;
 	float xmin;
 	float xmax;
@@ -18,7 +18,7 @@ public class Ship : MonoBehaviour {
 		xmin = leftmost.x + padding;
 		xmax = rightmost.x - padding;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetKey(KeyCode.LeftArrow)){
