@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-
+    public GameObject projectile;
+    public float projectileSpeed;
+    public float firingRate = 0.2f;
 	public float speed = 15.0f;
 	public float padding = 1;
 	float xmin;
 	float xmax;
+
+    void Shoot()
+    {
+        GameObject bullet = Instantiate(projectile, transform.position, Quaternion.identity) as GameObject;
+        bullet.GetComponent<Rigidbody2D>().velocity = new Vector3(0, projectileSpeed, 0);
+    }
 
 	// Use this for initialization
 	void Start () {
@@ -29,5 +37,15 @@ public class Player : MonoBehaviour {
 		// Restrict the player to the gamespace
 		float newX = Mathf.Clamp(transform.position.x, xmin, xmax);
 		transform.position = new Vector3(newX, transform.position.y, transform.position.z);
-	}
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            InvokeRepeating("Shoot", 0.00001f, firingRate);
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            CancelInvoke("Shoot");
+        }
+
+    }
 }
