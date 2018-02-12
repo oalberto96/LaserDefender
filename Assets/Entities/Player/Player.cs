@@ -8,17 +8,33 @@ public class Player : MonoBehaviour {
     public float firingRate = 0.2f;
 	public float speed = 15.0f;
 	public float padding = 1;
+    public float life = 500;
 	float xmin;
 	float xmax;
 
     void Shoot()
     {
-        GameObject bullet = Instantiate(projectile, transform.position, Quaternion.identity) as GameObject;
+        Vector3 offset = new Vector3(0, 1, 0);
+        GameObject bullet = Instantiate(projectile, transform.position + offset, Quaternion.identity) as GameObject;
         bullet.GetComponent<Rigidbody2D>().velocity = new Vector3(0, projectileSpeed, 0);
     }
 
-	// Use this for initialization
-	void Start () {
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Projectile missile = other.gameObject.GetComponent<Projectile>();
+        if (missile)
+        {
+            missile.Hit();
+            life -= missile.damage;
+            if (life < 0)
+            {
+                Destroy(this.gameObject);
+            }
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
 		float distance = transform.position.z - Camera.main.transform.position.z;	
 		//Left bottom is (0,0), Right top us (1,1)
 		Vector3 leftmost = Camera.main.ViewportToWorldPoint(new Vector3(0, 0, distance));
